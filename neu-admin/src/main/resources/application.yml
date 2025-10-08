@@ -164,4 +164,4 @@ ollama:
 # 高德地图配置
 gaode:
   # 高德地图API Key
-  key: ${GAODE_API_KEY:b1c41f475c10f682da932ccca4a1f73d}
+  key: ${GAODE_API_KEY:7ef39f005121dc7410b1ffe900531b38}

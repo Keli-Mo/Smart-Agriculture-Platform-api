@@ -293,8 +293,8 @@ public class AcwGreenhouseMonitorController extends BaseController
         //计算平均值
         for (int i = 0; i < 24; i++) {
             double averageTemperature = hourlyRecordCount[i] > 0 ? NumberUtil.div(hourlyTemperatureSum[i], hourlyRecordCount[i], 1) : 0;
-            double averageHumi = hourlyRecordCount[i] > 0 ? NumberUtil.div(hourlySmokeSum[i], hourlyRecordCount[i], 1) : 0;
-            double averageSmoke = hourlyRecordCount[i] > 0 ? NumberUtil.div(hourlyHumiSSum[i], hourlyRecordCount[i], 1) : 0;
+            double averageHumi = hourlyRecordCount[i] > 0 ? NumberUtil.div(hourlyHumiSSum[i], hourlyRecordCount[i], 1) : 0;
+            double averageSmoke = hourlyRecordCount[i] > 0 ? NumberUtil.div(hourlySmokeSum[i], hourlyRecordCount[i], 1) : 0;
             double averagePm25 = hourlyRecordCount[i] > 0 ? NumberUtil.div(hourlyPm25Sum[i], hourlyRecordCount[i], 1) : 0;
             report.getTemperature().add(averageTemperature);
             report.getHumi().add(averageHumi);

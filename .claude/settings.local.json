@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mysql:*)",
+      "Read(//f/proj/farm/app/html/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
