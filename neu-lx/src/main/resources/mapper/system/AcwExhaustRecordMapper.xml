@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neu.system.mapper.AcwExhaustRecordMapper">
+    
+    <resultMap type="AcwExhaustRecord" id="AcwExhaustRecordResult">
+        <result property="id"    column="id"    />
+        <result property="greenhouseId"    column="greenhouse_id"    />
+        <result property="scheduleId"    column="schedule_id"    />
+        <result property="action"    column="action"    />
+        <result property="duration"    column="duration"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectAcwExhaustRecordVo">
+        select id, greenhouse_id, schedule_id, action, duration, create_time from acw_exhaust_record
+    </sql>
+
+    <select id="selectAcwExhaustRecordList" parameterType="AcwExhaustRecord" resultMap="AcwExhaustRecordResult">
+        <include refid="selectAcwExhaustRecordVo"/>
+        <where>  
+            <if test="greenhouseId != null "> and greenhouse_id = #{greenhouseId}</if>
+            <if test="scheduleId != null "> and schedule_id = #{scheduleId}</if>
+            <if test="action != null  and action != ''"> and action = #{action}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectAcwExhaustRecordById" parameterType="Long" resultMap="AcwExhaustRecordResult">
+        <include refid="selectAcwExhaustRecordVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAcwExhaustRecord" parameterType="AcwExhaustRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into acw_exhaust_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="greenhouseId != null">greenhouse_id,</if>
+            <if test="scheduleId != null">schedule_id,</if>
+            <if test="action != null">action,</if>
+            <if test="duration != null">duration,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="greenhouseId != null">#{greenhouseId},</if>
+            <if test="scheduleId != null">#{scheduleId},</if>
+            <if test="action != null">#{action},</if>
+            <if test="duration != null">#{duration},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAcwExhaustRecord" parameterType="AcwExhaustRecord">
+        update acw_exhaust_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="greenhouseId != null">greenhouse_id = #{greenhouseId},</if>
+            <if test="scheduleId != null">schedule_id = #{scheduleId},</if>
+            <if test="action != null">action = #{action},</if>
+            <if test="duration != null">duration = #{duration},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAcwExhaustRecordById" parameterType="Long">
+        delete from acw_exhaust_record where id = #{id}
+    </delete>
+
+    <delete id="deleteAcwExhaustRecordByIds" parameterType="String">
+        delete from acw_exhaust_record where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

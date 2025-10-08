@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neu.system.mapper.AcwGreenhouseMonitorMapper">
+    
+    <resultMap type="AcwGreenhouseMonitor" id="AcwGreenhouseMonitorResult">
+        <result property="id"    column="id"    />
+        <result property="ghId"    column="gh_id"    />
+        <result property="deviceNo"    column="device_no"    />
+        <result property="temperature"    column="temperature"    />
+        <result property="humility"    column="humility"    />
+        <result property="smoke"    column="smoke"    />
+        <result property="pm25"    column="PM25"    />
+        <result property="dataTime"    column="data_time"    />
+    </resultMap>
+
+    <sql id="selectAcwGreenhouseMonitorVo">
+        select id, gh_id, device_no, temperature, humility, smoke, PM25, data_time from acw_greenhouse_monitor
+    </sql>
+
+    <select id="selectAcwGreenhouseMonitorList" parameterType="AcwGreenhouseMonitor" resultMap="AcwGreenhouseMonitorResult">
+        <include refid="selectAcwGreenhouseMonitorVo"/>
+        <where>  
+            <if test="ghId != null "> and gh_id = #{ghId}</if>
+            <if test="deviceNo != null  and deviceNo != ''"> and device_no = #{deviceNo}</if>
+            <if test="params.beginDataTime != null and params.beginDataTime != '' and params.endDataTime != null and params.endDataTime != ''"> and data_time between #{params.beginDataTime} and #{params.endDataTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectAcwGreenhouseMonitorById" parameterType="Long" resultMap="AcwGreenhouseMonitorResult">
+        <include refid="selectAcwGreenhouseMonitorVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAcwGreenhouseMonitor" parameterType="AcwGreenhouseMonitor" useGeneratedKeys="true" keyProperty="id">
+        insert into acw_greenhouse_monitor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ghId != null">gh_id,</if>
+            <if test="deviceNo != null">device_no,</if>
+            <if test="temperature != null">temperature,</if>
+            <if test="humility != null">humility,</if>
+            <if test="smoke != null">smoke,</if>
+            <if test="pm25 != null">PM25,</if>
+            <if test="dataTime != null">data_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ghId != null">#{ghId},</if>
+            <if test="deviceNo != null">#{deviceNo},</if>
+            <if test="temperature != null">#{temperature},</if>
+            <if test="humility != null">#{humility},</if>
+            <if test="smoke != null">#{smoke},</if>
+            <if test="pm25 != null">#{pm25},</if>
+            <if test="dataTime != null">#{dataTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAcwGreenhouseMonitor" parameterType="AcwGreenhouseMonitor">
+        update acw_greenhouse_monitor
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ghId != null">gh_id = #{ghId},</if>
+            <if test="deviceNo != null">device_no = #{deviceNo},</if>
+            <if test="temperature != null">temperature = #{temperature},</if>
+            <if test="humility != null">humility = #{humility},</if>
+            <if test="smoke != null">smoke = #{smoke},</if>
+            <if test="pm25 != null">PM25 = #{pm25},</if>
+            <if test="dataTime != null">data_time = #{dataTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAcwGreenhouseMonitorById" parameterType="Long">
+        delete from acw_greenhouse_monitor where id = #{id}
+    </delete>
+
+    <delete id="deleteAcwGreenhouseMonitorByIds" parameterType="String">
+        delete from acw_greenhouse_monitor where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

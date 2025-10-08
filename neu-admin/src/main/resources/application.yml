@@ -1,0 +1,167 @@
+# 项目相关配置
+neu:
+  # 项目名称
+  name: '智慧农业监测系统'
+  # 版本
+  version: 3.4.0
+  # 版权年份
+  copyrightYear: 2021
+  # 实例演示开关
+  demoEnabled: true
+  # 文件路径 示例（ Windows配置D:/neu/uploadPath，Linux配置 /home/neu/uploadPath）
+  # profile: C:/neu/uploadPath
+  profile: D:\ruixiangzhcs\uploadPath
+
+  # 获取ip地址开关
+  addressEnabled: false
+  # 验证码类型 math 数组计算 char 字符验证
+  captchaType: math
+
+# 开发环境配置
+server:
+  # 服务器的HTTP端口，默认为8080
+  port: 5502
+  servlet:
+    # 应用的访问路径
+    context-path: /
+    uri-encoding: UTF-8
+    # tomcat最大线程数，默认为200
+    max-threads: 800
+    # Tomcat启动初始化的线程数，默认值25
+    min-spare-threads: 30
+
+# 日志配置
+logging:
+  level:
+    com.neu: debug
+    org.springframework: warn
+
+# Spring配置
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  # 资源信息
+  messages:
+    # 国际化资源文件路径
+    basename: i18n/messages
+  profiles:
+    active: druid
+  # 文件上传
+  servlet:
+    multipart:
+      # 单个文件大小
+      max-file-size: 10MB
+      # 设置总上传的文件大小
+      max-request-size: 20MB
+  # 服务模块
+  devtools:
+    restart:
+      # 热部署开关
+      enabled: true
+  # redis 配置
+  redis:
+    # 地址
+    host: 127.0.0.1
+    # 端口，默认为6379
+    port: 63821
+    #port: 13115
+    # 数据库索引
+    database: 6
+    # 密码
+    password:
+    # 连接超时时间
+    timeout: 10s
+    lettuce:
+      pool:
+        # 连接池中的最小空闲连接
+        min-idle: 0
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池的最大数据库连接数
+        max-active: 8
+        # #连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+
+# token配置
+token:
+  # 令牌自定义标识
+  header: Authorization
+  # 令牌密钥
+  secret: abcdefghijklmnopqrstuvwxyz
+  # 令牌有效期（默认30分钟）
+  expireTime: 30
+
+# MyBatis配置
+mybatis:
+  # 搜索指定包别名
+  typeAliasesPackage: com.neu.**.domain
+  # 配置mapper的扫描，找到所有的mapper.xml映射文件
+  mapperLocations: classpath*:mapper/**/*Mapper.xml
+  # 加载全局的配置文件
+  configLocation: classpath:mybatis/mybatis-config.xml
+
+# PageHelper分页插件
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+# Docs API配置
+springdoc:
+  swagger-ui:
+    # API文档, 默认路径:swagger-ui/index.html, 通过http://localhost:8080/docs/index.html访问
+    path: /swagger-ui.html
+    # 开启Swagger UI界面
+    enabled: true
+    # 根据HTTP方法对API路径进行排序
+    disable-swagger-default-url: false
+    operations-sorter: method
+  api-docs:
+    # OpenAPI的路径描述，默认路径:/v3/api-docs, 通过http://localhost:8080/docs/api访问文档描述
+    # OpenAPI描述定义默认为JSON格式, 通过http://localhost:8080/docs/api.yaml获取yaml格式
+    path: /v3/api-docs
+    # 开启api-docs
+    enabled: true
+  # 配置需要生成接口文档的扫描包路径
+  #packages-to-scan: com.neu.system.controller
+  # 配置需要生成接口文档的接口路径
+  # paths-to-match:  /test/**,/user/**
+  group-configs:
+    - group: 'system'
+      display-name: '系统模块'
+      packages-to-scan:
+        - com.neu.web.controller.system
+    - group: 'biz'
+      display-name: '业务模块'
+      packages-to-scan: com.neu.system.controller
+  # knife4j的增强配置，不需要增强可以不配
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+    swagger-model-name: 实体类
+
+# 防止XSS攻击
+xss:
+  # 过滤开关
+  enabled: true
+  # 排除链接（多个用逗号分隔）
+  excludes: /system/notice/*
+  # 匹配链接
+  urlPatterns: /system/*,/monitor/*,/tool/*,/acw/*
+
+# ollama配置
+ollama:
+  # ollama服务的地址
+  url: ${OLLAMA_HOST_ADDR:http://localhost:11434}
+  # 请求超时时间，单位：秒
+  request-timeout-seconds: 300
+  # 模型名称
+  model-name: deepseek-r1:8b
+
+# 高德地图配置
+gaode:
+  # 高德地图API Key
+  key: ${GAODE_API_KEY:b1c41f475c10f682da932ccca4a1f73d}

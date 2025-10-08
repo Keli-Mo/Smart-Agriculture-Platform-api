@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neu.system.mapper.AcwChatMessagesMapper">
+    
+    <resultMap type="AcwChatMessages" id="AcwChatMessagesResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="role"    column="role"    />
+        <result property="content"    column="content"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectAcwChatMessagesVo">
+        select id, user_id, role, content, create_time from acw_chat_messages
+    </sql>
+
+    <select id="selectAcwChatMessagesList" parameterType="AcwChatMessages" resultMap="AcwChatMessagesResult">
+        <include refid="selectAcwChatMessagesVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="role != null  and role != ''"> and role = #{role}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectAcwChatMessagesById" parameterType="Long" resultMap="AcwChatMessagesResult">
+        <include refid="selectAcwChatMessagesVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAcwChatMessages" parameterType="AcwChatMessages" useGeneratedKeys="true" keyProperty="id">
+        insert into acw_chat_messages
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="role != null and role != ''">role,</if>
+            <if test="content != null">content,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="role != null and role != ''">#{role},</if>
+            <if test="content != null">#{content},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAcwChatMessages" parameterType="AcwChatMessages">
+        update acw_chat_messages
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="role != null and role != ''">role = #{role},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAcwChatMessagesById" parameterType="Long">
+        delete from acw_chat_messages where id = #{id}
+    </delete>
+
+    <delete id="deleteAcwChatMessagesByIds" parameterType="String">
+        delete from acw_chat_messages where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

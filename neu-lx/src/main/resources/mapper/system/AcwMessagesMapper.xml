@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neu.system.mapper.AcwMessagesMapper">
+    
+    <resultMap type="AcwMessages" id="AcwMessagesResult">
+        <result property="id"    column="id"    />
+        <result property="topic"    column="topic"    />
+        <result property="category"    column="category"    />
+        <result property="msgBody"    column="msg_body"    />
+        <result property="context"    column="context"    />
+        <result property="sendTime"    column="send_time"    />
+        <result property="receiveTime"    column="receive_time"    />
+        <result property="sender"    column="sender"    />
+        <result property="receiver"    column="receiver"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectAcwMessagesVo">
+        select id, topic, category, msg_body, context, send_time, receive_time, sender, receiver, status from acw_messages
+    </sql>
+
+    <select id="selectAcwMessagesList" parameterType="AcwMessages" resultMap="AcwMessagesResult">
+        <include refid="selectAcwMessagesVo"/>
+        <where>  
+            <if test="topic != null  and topic != ''"> and topic = #{topic}</if>
+            <if test="category != null  and category != ''"> and category = #{category}</if>
+            <if test="params.beginSendTime != null and params.beginSendTime != '' and params.endSendTime != null and params.endSendTime != ''"> and send_time between #{params.beginSendTime} and #{params.endSendTime}</if>
+            <if test="params.beginReceiveTime != null and params.beginReceiveTime != '' and params.endReceiveTime != null and params.endReceiveTime != ''"> and receive_time between #{params.beginReceiveTime} and #{params.endReceiveTime}</if>
+            <if test="sender != null  and sender != ''"> and sender = #{sender}</if>
+            <if test="receiver != null  and receiver != ''"> and receiver = #{receiver}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectAcwMessagesById" parameterType="Long" resultMap="AcwMessagesResult">
+        <include refid="selectAcwMessagesVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAcwMessages" parameterType="AcwMessages" useGeneratedKeys="true" keyProperty="id">
+        insert into acw_messages
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="topic != null">topic,</if>
+            <if test="category != null">category,</if>
+            <if test="msgBody != null">msg_body,</if>
+            <if test="context != null">context,</if>
+            <if test="sendTime != null">send_time,</if>
+            <if test="receiveTime != null">receive_time,</if>
+            <if test="sender != null">sender,</if>
+            <if test="receiver != null">receiver,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="topic != null">#{topic},</if>
+            <if test="category != null">#{category},</if>
+            <if test="msgBody != null">#{msgBody},</if>
+            <if test="context != null">#{context},</if>
+            <if test="sendTime != null">#{sendTime},</if>
+            <if test="receiveTime != null">#{receiveTime},</if>
+            <if test="sender != null">#{sender},</if>
+            <if test="receiver != null">#{receiver},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAcwMessages" parameterType="AcwMessages">
+        update acw_messages
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="topic != null">topic = #{topic},</if>
+            <if test="category != null">category = #{category},</if>
+            <if test="msgBody != null">msg_body = #{msgBody},</if>
+            <if test="context != null">context = #{context},</if>
+            <if test="sendTime != null">send_time = #{sendTime},</if>
+            <if test="receiveTime != null">receive_time = #{receiveTime},</if>
+            <if test="sender != null">sender = #{sender},</if>
+            <if test="receiver != null">receiver = #{receiver},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAcwMessagesById" parameterType="Long">
+        delete from acw_messages where id = #{id}
+    </delete>
+
+    <delete id="deleteAcwMessagesByIds" parameterType="String">
+        delete from acw_messages where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

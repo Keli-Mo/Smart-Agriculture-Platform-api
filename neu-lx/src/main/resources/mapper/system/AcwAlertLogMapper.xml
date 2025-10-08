@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neu.system.mapper.AcwAlertLogMapper">
+
+    <resultMap type="AcwAlertLog" id="AcwAlertLogResult">
+        <result property="id"    column="id"    />
+        <result property="ghId"    column="gh_id"    />
+        <result property="deviceNo"    column="device_no"    />
+        <result property="temperature"    column="temperature"    />
+        <result property="humility"    column="humility"    />
+        <result property="smoke"    column="smoke"    />
+        <result property="pm25"    column="pm25"    />
+        <result property="alert"    column="alert"    />
+        <result property="type"    column="type"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+    </resultMap>
+
+    <sql id="selectAcwAlertLogVo">
+        select id, gh_id, device_no, temperature, humility, smoke, pm25, alert, type, create_time, create_by from acw_alert_log
+    </sql>
+
+    <select id="selectAcwAlertLogList" parameterType="AcwAlertLog" resultMap="AcwAlertLogResult">
+        <include refid="selectAcwAlertLogVo"/>
+        <where>
+            <if test="ghId != null "> and gh_id = #{ghId}</if>
+            <if test="deviceNo != null  and deviceNo != ''"> and device_no = #{deviceNo}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+        </where>
+    </select>
+
+    <select id="selectAcwAlertLogById" parameterType="Long" resultMap="AcwAlertLogResult">
+        <include refid="selectAcwAlertLogVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAcwAlertLog" parameterType="AcwAlertLog" useGeneratedKeys="true" keyProperty="id">
+        insert into acw_alert_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ghId != null">gh_id,</if>
+            <if test="deviceNo != null">device_no,</if>
+            <if test="temperature != null">temperature,</if>
+            <if test="humility != null">humility,</if>
+            <if test="smoke != null">smoke,</if>
+            <if test="pm25 != null">pm25,</if>
+            <if test="alert != null">alert,</if>
+            <if test="type != null">type,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ghId != null">#{ghId},</if>
+            <if test="deviceNo != null">#{deviceNo},</if>
+            <if test="temperature != null">#{temperature},</if>
+            <if test="humility != null">#{humility},</if>
+            <if test="smoke != null">#{smoke},</if>
+            <if test="pm25 != null">#{pm25},</if>
+            <if test="alert != null">#{alert},</if>
+            <if test="type != null">#{type},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+        </trim>
+    </insert>
+
+    <update id="updateAcwAlertLog" parameterType="AcwAlertLog">
+        update acw_alert_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ghId != null">gh_id = #{ghId},</if>
+            <if test="deviceNo != null">device_no = #{deviceNo},</if>
+            <if test="temperature != null">temperature = #{temperature},</if>
+            <if test="humility != null">humility = #{humility},</if>
+            <if test="smoke != null">smoke = #{smoke},</if>
+            <if test="pm25 != null">pm25 = #{pm25},</if>
+            <if test="alert != null">alert = #{alert},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAcwAlertLogById" parameterType="Long">
+        delete from acw_alert_log where id = #{id}
+    </delete>
+
+    <delete id="deleteAcwAlertLogByIds" parameterType="String">
+        delete from acw_alert_log where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

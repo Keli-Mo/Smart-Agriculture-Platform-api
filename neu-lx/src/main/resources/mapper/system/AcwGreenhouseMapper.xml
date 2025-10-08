@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neu.system.mapper.AcwGreenhouseMapper">
+    
+    <resultMap type="AcwGreenhouse" id="AcwGreenhouseResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="location"    column="location"    />
+        <result property="length"    column="length"    />
+        <result property="width"    column="width"    />
+        <result property="height"    column="height"    />
+        <result property="area"    column="area"    />
+        <result property="crop"    column="crop"    />
+        <result property="lng"    column="lng"    />
+        <result property="lat"    column="lat"    />
+        <result property="picture"    column="picture"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectAcwGreenhouseVo">
+        select id, name, location, length, width, height, area, crop, lng, lat, picture, remark from acw_greenhouse
+    </sql>
+
+    <select id="selectAcwGreenhouseList" parameterType="AcwGreenhouse" resultMap="AcwGreenhouseResult">
+        <include refid="selectAcwGreenhouseVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectAcwGreenhouseById" parameterType="Long" resultMap="AcwGreenhouseResult">
+        <include refid="selectAcwGreenhouseVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAcwGreenhouse" parameterType="AcwGreenhouse" useGeneratedKeys="true" keyProperty="id">
+        insert into acw_greenhouse
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="location != null">location,</if>
+            <if test="length != null">length,</if>
+            <if test="width != null">width,</if>
+            <if test="height != null">height,</if>
+            <if test="area != null">area,</if>
+            <if test="crop != null">crop,</if>
+            <if test="lng != null">lng,</if>
+            <if test="lat != null">lat,</if>
+            <if test="picture != null">picture,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="location != null">#{location},</if>
+            <if test="length != null">#{length},</if>
+            <if test="width != null">#{width},</if>
+            <if test="height != null">#{height},</if>
+            <if test="area != null">#{area},</if>
+            <if test="crop != null">#{crop},</if>
+            <if test="lng != null">#{lng},</if>
+            <if test="lat != null">#{lat},</if>
+            <if test="picture != null">#{picture},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAcwGreenhouse" parameterType="AcwGreenhouse">
+        update acw_greenhouse
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="location != null">location = #{location},</if>
+            <if test="length != null">length = #{length},</if>
+            <if test="width != null">width = #{width},</if>
+            <if test="height != null">height = #{height},</if>
+            <if test="area != null">area = #{area},</if>
+            <if test="crop != null">crop = #{crop},</if>
+            <if test="lng != null">lng = #{lng},</if>
+            <if test="lat != null">lat = #{lat},</if>
+            <if test="picture != null">picture = #{picture},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAcwGreenhouseById" parameterType="Long">
+        delete from acw_greenhouse where id = #{id}
+    </delete>
+
+    <delete id="deleteAcwGreenhouseByIds" parameterType="String">
+        delete from acw_greenhouse where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neu.system.mapper.AcwDeviceInfoMapper">
+    
+    <resultMap type="AcwDeviceInfo" id="AcwDeviceInfoResult">
+        <result property="id"    column="id"    />
+        <result property="serialNo"    column="serial_no"    />
+        <result property="deviceType"    column="device_type"    />
+        <result property="status"    column="status"    />
+        <result property="registerDate"    column="register_date"    />
+    </resultMap>
+
+    <sql id="selectAcwDeviceInfoVo">
+        select id, serial_no, device_type, status, register_date from acw_device_info
+    </sql>
+
+    <select id="selectAcwDeviceInfoList" parameterType="AcwDeviceInfo" resultMap="AcwDeviceInfoResult">
+        <include refid="selectAcwDeviceInfoVo"/>
+        <where>  
+            <if test="serialNo != null  and serialNo != ''"> and serial_no = #{serialNo}</if>
+        </where>
+    </select>
+    
+    <select id="selectAcwDeviceInfoById" parameterType="Long" resultMap="AcwDeviceInfoResult">
+        <include refid="selectAcwDeviceInfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAcwDeviceInfo" parameterType="AcwDeviceInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into acw_device_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="deviceType != null">device_type,</if>
+            <if test="status != null">status,</if>
+            <if test="registerDate != null">register_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="deviceType != null">#{deviceType},</if>
+            <if test="status != null">#{status},</if>
+            <if test="registerDate != null">#{registerDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAcwDeviceInfo" parameterType="AcwDeviceInfo">
+        update acw_device_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serialNo != null">serial_no = #{serialNo},</if>
+            <if test="deviceType != null">device_type = #{deviceType},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="registerDate != null">register_date = #{registerDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAcwDeviceInfoById" parameterType="Long">
+        delete from acw_device_info where id = #{id}
+    </delete>
+
+    <delete id="deleteAcwDeviceInfoByIds" parameterType="String">
+        delete from acw_device_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
