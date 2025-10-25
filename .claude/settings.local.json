@@ -2,7 +2,13 @@
   "permissions": {
     "allow": [
       "Bash(mysql:*)",
-      "Read(//f/proj/farm/app/html/**)"
+      "Read(//f/proj/farm/app/html/**)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(tasklist:*)",
+      "Bash(curl:*)",
+      "Bash(set)",
+      "Bash(dir:*)"
     ],
     "deny": [],
     "ask": []
